@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>this is a webpage</title>
+    <meta name="description" content="This is an example of a meta description.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="theme.css">
+    <style>
+    body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  width: 130px;
+  position: fixed;
+  z-index: 1;
+  top: 20%;
+  left: 10px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #2196F3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.main {
+  margin-left: 140px; /* Same width as the sidebar + left position in px */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+#viz {
+            width: 900px;
+            height: 700px;
+            border: 1px solid lightgray;
+            font: 22pt arial;
+            margin-left: 20%;
+            padding: 0px 10px;
+
+        }
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+    </style>
+   
+    <!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script type="text/javascript" src="https://unpkg.com/neovis.js@2.0.2"></script>
+  
+  <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+            <script type="text/javascript">
+                // define config car
+                // instantiate nodevis object
+                // draw
+        
+                var viz;
+        
+                function draw() {
+                    var config = {
+                        containerId: "viz",
+                        neo4j: {
+                            serverUrl: "neo4j://76510994.databases.neo4j.io",
+                            serverUser: "neo4j",
+                            serverPassword: "WunyZD76Wz5B-YY9YiwwlLGKQ0472La_TVN4SyAL17I",
+                            driverConfig: {
+                            encrypted:"ENCRYPTION_ON",
+                            trust:"TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+                            }  
+                        },
+                        labels: {
+                            Character: {
+                                label: "name",
+                                value: "pagerank",
+                                group: "community"
+                            }
+                        },
+                        relationships: {
+                            INTERACTS: {
+                                value: "weight"
+                            }
+                        },
+                        initialCypher: "MATCH (n)-[r]->(m) RETURN n,r,m"
+                    };
+        
+                    viz = new NeoVis.default(config);
+                    viz.render();
+                    console.log(viz);
+        
+                }
+            </script>
+
+  </head>
+
+
+  <body style="max-width: 95%;", onload="draw()">
+    <div style="
+      background: #f1f1f1;
+      text-align: center;
+      padding: 20px;">
+      <p style="text-align:  center;">online knowledge graph</p>
+      </div>
+
+      <div class="sidenav">
+        <a href="index.html">index</a>
+        
+        <a href="about.html">About</a>
+        <a href="data.html">data</a>
+
+    </div>
+
+<div id="viz"></div>
+
+
+Cypher query: 
+<input style="margin-left: 30%;"type="submit" value="node-one-hop" id="onehop">
+<input style="margin-left: 20%;"type="submit" value="Allnodes" id="Allnodes">
+<input style="margin-left: 10%;"type="submit" value="Stabilize" id="stabilize">
+
+
+</body>
+
+<script>
+	$("#Allnodes").click(function () {
+
+		var cypher = "MATCH(n) RETURN n";
+		viz.renderWithCypher(cypher);
+
+	});
+
+    $("#onehop").click(function () {
+
+var cypher = "match(n:Node {Node_ID: 15})-[r]-(m)-[r1]->(m1) return n,r,r1,m,m1";
+viz.renderWithCypher(cypher);
+
+});
+
+	$("#stabilize").click(function () {
+		viz.stabilize();
+	})
+
+</script>
+
+  <div style="
+    background: #f1f1f1;
+    font-size: 12px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    padding: 15px 0;
+    width: 95%;
+  ">
+    <a href= "https://www.4399.com">relative link</a>
+  </div>
+  </body>
+</html>
